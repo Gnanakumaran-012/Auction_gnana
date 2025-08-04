@@ -1,0 +1,46 @@
+.auction-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.auction-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-img-top {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.auction-card:hover .card-img-top {
+  opacity: 0.9;
+}
+
+.badge {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+}
+
+.btn-primary {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+}

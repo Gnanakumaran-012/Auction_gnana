@@ -1,0 +1,112 @@
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="display-4 text-center mb-4">Live Auctions</h1>
+      
+      <!-- Search and Filters -->
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- Search Bar -->
+            <div class="col-md-4">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Search auctions..."
+                  (input)="onSearch($event)"
+                >
+              </div>
+            </div>
+            
+            <!-- Category Filter -->
+            <div class="col-md-4">
+              <select class="form-select" (change)="onCategoryChange($event)">
+                <option value="all">All Categories</option>
+                <option *ngFor="let cat of categories" [value]="cat" *ngIf="cat !== 'all'">
+                  {{ cat }}
+                </option>
+              </select>
+            </div>
+            
+            <!-- Sort Options -->
+            <div class="col-md-4">
+              <select class="form-select" (change)="onSortChange($event)">
+                <option value="ending-soon">Ending Soon</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="most-bids">Most Bids</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auction Items Grid -->
+  <div class="row g-4">
+    <div class="col-lg-4 col-md-6" *ngFor="let item of filteredItems">
+      <div class="card h-100 shadow-sm auction-card">
+        <!-- Item Image -->
+        <div class="position-relative">
+          <img [src]="item.imageUrl" class="card-img-top" [alt]="item.title" style="height: 250px; object-fit: cover;">
+          <span class="position-absolute top-0 end-0 m-2 badge bg-danger">
+            {{ getTimeRemaining(item.endTime) }}
+          </span>
+        </div>
+        
+        <!-- Card Body -->
+        <div class="card-body">
+          <h5 class="card-title">{{ item.title }}</h5>
+          <p class="card-text text-muted small">{{ item.description }}</p>
+          
+          <!-- Auction Details -->
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-muted">Current Bid:</span>
+              <span class="h5 mb-0 text-primary">${{ item.currentBid | number:'1.0-0' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-muted small">Starting Price:</span>
+              <span class="small">${{ item.startingPrice | number:'1.0-0' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-muted small">Total Bids:</span>
+              <span class="small">{{ item.totalBids }}</span>
+            </div>
+          </div>
+          
+          <!-- Seller Info -->
+          <div class="mb-3 pb-3 border-bottom">
+            <small class="text-muted">
+              <i class="bi bi-person"></i> {{ item.seller }}
+            </small>
+          </div>
+          
+          <!-- Action Button -->
+          <button 
+            class="btn btn-primary w-100" 
+            (click)="placeBid(item)"
+            [disabled]="getTimeRemaining(item.endTime) === 'Ended'"
+          >
+            <i class="bi bi-hammer"></i> 
+            {{ getTimeRemaining(item.endTime) === 'Ended' ? 'Auction Ended' : 'Place Bid' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div class="row" *ngIf="filteredItems.length === 0">
+    <div class="col-12 text-center py-5">
+      <h3 class="text-muted">No auctions found</h3>
+      <p class="text-muted">Try adjusting your search or filters</p>
+    </div>
+  </div>
+</div>
